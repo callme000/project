@@ -1,0 +1,31 @@
+/* Custom styles for the Task Management Dashboard */
+
+:root {
+    --todo-color: #6c757d;
+    --inprogress-color: #0d6efd;
+    --done-color: #198754;
+}
+
+body {
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.task-column {
+    transition: all 0.3s ease;
+    border: 2px dashed transparent;
+}
+
+.task-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: grab;
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.priority-high { border-left: 5px solid #dc3545; }
+.priority-medium { border-left: 5px solid #ffc107; }
+.priority-low { border-left: 5px solid #0dcaf0; }

@@ -1,31 +1,121 @@
-/* Custom styles for the Task Management Dashboard */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
+/* Unified Color Palette & Variables */
 :root {
-    --todo-color: #6c757d;
-    --inprogress-color: #0d6efd;
-    --done-color: #198754;
+    --font-primary: 'Plus Jakarta Sans', sans-serif;
+    
+    /* Light Theme (Default) */
+    --bg-primary: hsl(210, 20%, 98%);
+    --bg-card: hsl(0, 0%, 100%);
+    --bg-navbar: hsl(220, 30%, 10%);
+    --text-primary: hsl(220, 20%, 15%);
+    --text-secondary: hsl(220, 10%, 45%);
+    --border-color: hsl(220, 15%, 90%);
+    
+    /* Brand Colors */
+    --color-primary: hsl(250, 85%, 55%);
+    --color-primary-rgb: 99, 102, 241;
+    --color-primary-hover: hsl(250, 85%, 45%);
+    --color-success: hsl(142, 70%, 45%);
+    --color-danger: hsl(0, 84%, 60%);
+    --color-warning: hsl(38, 92%, 50%);
+    --color-info: hsl(195, 85%, 60%);
+    
+    /* Kanban Custom Colors (Light Mode) */
+    --bg-todo-col: hsl(210, 16%, 93%);
+    --bg-inprogress-col: hsl(210, 40%, 95%);
+    --bg-done-col: hsl(140, 30%, 95%);
+    
+    /* Transitions & Shadows */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
+/* Dark Theme Variables */
+[data-theme="dark"] {
+    --bg-primary: hsl(222, 25%, 10%);
+    --bg-card: hsl(222, 20%, 15%);
+    --bg-navbar: hsl(222, 30%, 8%);
+    --text-primary: hsl(210, 20%, 98%);
+    --text-secondary: hsl(218, 11%, 65%);
+    --border-color: hsl(222, 15%, 22%);
+    
+    /* Vibrant Brand Colors for Dark Mode */
+    --color-primary: hsl(250, 90%, 65%);
+    --color-primary-hover: hsl(250, 90%, 75%);
+    --color-success: hsl(142, 75%, 55%);
+    --color-danger: hsl(0, 90%, 65%);
+    --color-warning: hsl(38, 95%, 55%);
+    --color-info: hsl(195, 90%, 65%);
+    
+    /* Kanban Custom Colors (Dark Mode) */
+    --bg-todo-col: hsl(222, 15%, 13%);
+    --bg-inprogress-col: hsl(222, 20%, 14%);
+    --bg-done-col: hsl(140, 15%, 12%);
+    
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Base Body Styles */
 body {
-    background-color: #f0f2f5;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    transition: var(--transition-smooth);
+    min-height: 100vh;
 }
 
-.task-column {
-    transition: all 0.3s ease;
-    border: 2px dashed transparent;
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
 }
 
-.task-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: grab;
+/* Card Visual Improvements */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-smooth);
+}
+.card:hover {
+    box-shadow: var(--shadow-md);
 }
 
-.task-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+/* Task Priority Indicators */
+.priority-high { border-left: 5px solid var(--color-danger) !important; }
+.priority-medium { border-left: 5px solid var(--color-warning) !important; }
+.priority-low { border-left: 5px solid var(--color-info) !important; }
+
+/* Custom Button Overrides */
+.btn-primary {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--color-primary-hover) !important;
+    border-color: var(--color-primary-hover) !important;
 }
 
-.priority-high { border-left: 5px solid #dc3545; }
-.priority-medium { border-left: 5px solid #ffc107; }
-.priority-low { border-left: 5px solid #0dcaf0; }
+/* CSS Transition helper */
+.theme-transition {
+    transition: var(--transition-smooth) !important;
+}
+

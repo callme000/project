@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View real-time productivity statistics, completion rates, and priority analytics on your task boards.">
+    <title>Task Analytics - TaskFlow Suite</title>
+    <!-- Theme Switcher Script (Loads first to prevent white flash) -->
+    <script src="assets/js/theme.js"></script>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-check-double me-2 text-primary"></i>TaskFlow
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="analytics.html">Analytics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="team.html">Team</a></li>
+                    <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="archive.html">Archive</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <button class="btn btn-outline-light btn-sm rounded-circle p-0 d-flex align-items-center justify-content-center" id="themeToggle" aria-label="Toggle Dark Mode" style="width: 34px; height: 34px;">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="bg-primary text-white py-5 mb-5 shadow-sm">
+        <div class="container text-center">
+            <h1 class="fw-bold display-4">TaskFlow Analytics</h1>
+            <p class="lead text-white-50">Deep insights into your personal productivity and workflow velocity.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mb-5 flex-grow-1">
+        <!-- Overview Statistics Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="card h-100 border-0 p-4 text-center">
+                    <div class="text-primary mb-2">
+                        <i class="fas fa-tasks fa-2x"></i>
+                    </div>
+                    <h5 class="text-muted fw-bold">Active Tasks</h5>
+                    <h2 class="display-5 fw-bold mb-0" id="activeTasksCount">0</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 p-4 text-center">
+                    <div class="text-success mb-2">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                    <h5 class="text-muted fw-bold">Completed Tasks</h5>
+                    <h2 class="display-5 fw-bold mb-0" id="completedTasksCount">0</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 p-4 text-center">
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-archive fa-2x"></i>
+                    </div>
+                    <h5 class="text-muted fw-bold">Archived Tasks</h5>
+                    <h2 class="display-5 fw-bold mb-0" id="archivedTasksCount">0</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 border-0 p-4 text-center">
+                    <div class="text-info mb-2">
+                        <i class="fas fa-percentage fa-2x"></i>
+                    </div>
+                    <h5 class="text-muted fw-bold">Completion Rate</h5>
+                    <h2 class="display-5 fw-bold mb-0" id="completionRateValue">0%</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytical Details and Visualizations -->
+        <div class="row g-4">
+            <!-- Productivity Chart -->
+            <div class="col-lg-8">
+                <div class="card border-0 p-4 h-100">
+                    <h4 class="fw-bold mb-4">Task Status Distribution</h4>
+                    <div class="d-flex align-items-center justify-content-center flex-column py-4">
+                        <div class="d-flex w-100 mb-3 align-items-center">
+                            <span class="fw-semibold text-muted me-3" style="width: 100px;">To Do</span>
+                            <div class="progress flex-grow-1" style="height: 20px; border-radius: 10px;">
+                                <div class="progress-bar bg-secondary" id="todoProgressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+                        </div>
+                        <div class="d-flex w-100 mb-3 align-items-center">
+                            <span class="fw-semibold text-muted me-3" style="width: 100px;">In Progress</span>
+                            <div class="progress flex-grow-1" style="height: 20px; border-radius: 10px;">
+                                <div class="progress-bar bg-primary" id="inprogressProgressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+                        </div>
+                        <div class="d-flex w-100 align-items-center">
+                            <span class="fw-semibold text-muted me-3" style="width: 100px;">Done</span>
+                            <div class="progress flex-grow-1" style="height: 20px; border-radius: 10px;">
+                                <div class="progress-bar bg-success" id="doneProgressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Priority Analysis -->
+            <div class="col-lg-4">
+                <div class="card border-0 p-4 h-100">
+                    <h4 class="fw-bold mb-4">Priority Breakdown</h4>
+                    <div class="py-2">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="fw-semibold"><i class="fas fa-circle text-danger me-2"></i>High Priority</span>
+                            <span class="badge bg-danger rounded-pill px-3 py-2" id="highPriorityCount">0</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="fw-semibold"><i class="fas fa-circle text-warning me-2"></i>Medium Priority</span>
+                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2" id="mediumPriorityCount">0</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold"><i class="fas fa-circle text-info me-2"></i>Low Priority</span>
+                            <span class="badge bg-info text-dark rounded-pill px-3 py-2" id="lowPriorityCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-auto">
+        <div class="container text-center">
+            <p class="mb-2">&copy; 2026 TaskFlow Suite. All rights reserved.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#" class="text-white-50"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-white-50"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white-50"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/storage.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

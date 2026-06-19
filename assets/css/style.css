@@ -119,3 +119,38 @@ body {
     transition: var(--transition-smooth) !important;
 }
 
+/* Kanban Dashboard Layout & Columns */
+.task-column {
+    min-height: 450px;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color) !important;
+    transition: var(--transition-smooth);
+}
+
+#todoList, #inProgressList, #doneList {
+    min-height: 350px;
+}
+
+.task-card {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-smooth);
+    cursor: grab;
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.task-card:active {
+    cursor: grabbing;
+}
+
+

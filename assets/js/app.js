@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('archiveTableBody')) {
         initArchive();
     }
+    if (document.getElementById('activeTasksCount')) {
+        initAnalytics();
+    }
 });
 
 /**
@@ -422,4 +425,80 @@ function renderArchive() {
         `;
         archiveTableBody.insertAdjacentHTML('beforeend', rowHTML);
     });
+}
+
+/**
+ * Analytics Module
+ */
+function initAnalytics() {
+    renderAnalytics();
+}
+
+function renderAnalytics() {
+    const activeTasksCountEl = document.getElementById('activeTasksCount');
+    const completedTasksCountEl = document.getElementById('completedTasksCount');
+    const archivedTasksCountEl = document.getElementById('archivedTasksCount');
+    const completionRateValueEl = document.getElementById('completionRateValue');
+    
+    const todoProgressBar = document.getElementById('todoProgressBar');
+    const inprogressProgressBar = document.getElementById('inprogressProgressBar');
+    const doneProgressBar = document.getElementById('doneProgressBar');
+    
+    const highPriorityCountEl = document.getElementById('highPriorityCount');
+    const mediumPriorityCountEl = document.getElementById('mediumPriorityCount');
+    const lowPriorityCountEl = document.getElementById('lowPriorityCount');
+
+    if (!activeTasksCountEl) return;
+
+    const tasks = Storage.getTasks();
+    const archivedTasks = Storage.getArchivedTasks();
+
+    const activeTasksCount = tasks.length;
+    const completedActive = tasks.filter(t => t.status === 'Done').length;
+    const archivedTasksCount = archivedTasks.length;
+
+    const totalCompleted = completedActive + archivedTasksCount;
+    const totalCreated = activeTasksCount + archivedTasksCount;
+    const completionRate = totalCreated > 0 ? Math.round((totalCompleted / totalCreated) * 100) : 0;
+
+    // Render basic counter metrics
+    activeTasksCountEl.textContent = activeTasksCount;
+    completedTasksCountEl.textContent = completedActive;
+    archivedTasksCountEl.textContent = archivedTasksCount;
+    completionRateValueEl.textContent = completionRate + '%';
+
+    // Calculate Column Distribution Percentages (Avoid division by zero)
+    const todoCount = tasks.filter(t => t.status === 'Todo').length;
+    const inProgressCount = tasks.filter(t => t.status === 'InProgress').length;
+    const doneCount = completedActive;
+
+    const todoPct = activeTasksCount > 0 ? Math.round((todoCount / activeTasksCount) * 100) : 0;
+    const inProgressPct = activeTasksCount > 0 ? Math.round((inProgressCount / activeTasksCount) * 100) : 0;
+    const donePct = activeTasksCount > 0 ? Math.round((doneCount / activeTasksCount) * 100) : 0;
+
+    // Apply to Progress Bars
+    if (todoProgressBar) {
+        todoProgressBar.style.width = todoPct + '%';
+        todoProgressBar.textContent = todoPct + '%';
+        todoProgressBar.setAttribute('aria-valuenow', todoPct);
+    }
+    if (inprogressProgressBar) {
+        inprogressProgressBar.style.width = inProgressPct + '%';
+        inprogressProgressBar.textContent = inProgressPct + '%';
+        inprogressProgressBar.setAttribute('aria-valuenow', inProgressPct);
+    }
+    if (doneProgressBar) {
+        doneProgressBar.style.width = donePct + '%';
+        doneProgressBar.textContent = donePct + '%';
+        doneProgressBar.setAttribute('aria-valuenow', donePct);
+    }
+
+    // Priority Breakdown (Active + Archived tasks to reflect historic productivity)
+    const highCount = tasks.filter(t => t.priority === 'High').length + archivedTasks.filter(t => t.priority === 'High').length;
+    const mediumCount = tasks.filter(t => t.priority === 'Medium').length + archivedTasks.filter(t => t.priority === 'Medium').length;
+    const lowCount = tasks.filter(t => t.priority === 'Low').length + archivedTasks.filter(t => t.priority === 'Low').length;
+
+    if (highPriorityCountEl) highPriorityCountEl.textContent = highCount;
+    if (mediumPriorityCountEl) mediumPriorityCountEl.textContent = mediumCount;
+    if (lowPriorityCountEl) lowPriorityCountEl.textContent = lowCount;
 }

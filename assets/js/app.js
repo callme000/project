@@ -80,6 +80,21 @@ function initDashboard() {
     if (editModalEl) {
         editModalInstance = new bootstrap.Modal(editModalEl);
     }
+
+    // Search and Filter Listeners
+    const searchBar = document.getElementById('searchBar');
+    const filterPriority = document.getElementById('filterPriority');
+    
+    if (searchBar) {
+        searchBar.addEventListener('input', () => {
+            renderDashboard();
+        });
+    }
+    if (filterPriority) {
+        filterPriority.addEventListener('change', () => {
+            renderDashboard();
+        });
+    }
     
     // Task addition submission
     taskForm.addEventListener('submit', (e) => {
@@ -207,12 +222,27 @@ function renderDashboard() {
     doneList.innerHTML = '';
     
     const tasks = Storage.getTasks();
+
+    // Read search query & priority filter
+    const searchBar = document.getElementById('searchBar');
+    const filterPriority = document.getElementById('filterPriority');
+    const query = searchBar ? searchBar.value.toLowerCase().trim() : '';
+    const selectedPriority = filterPriority ? filterPriority.value : 'All';
+    
+    // Filter tasks
+    const filteredTasks = tasks.filter(task => {
+        const matchesSearch = !query || 
+                              task.title.toLowerCase().includes(query) || 
+                              task.description.toLowerCase().includes(query);
+        const matchesPriority = selectedPriority === 'All' || task.priority === selectedPriority;
+        return matchesSearch && matchesPriority;
+    });
     
     let todoCount = 0;
     let inProgressCount = 0;
     let doneCount = 0;
     
-    tasks.forEach(task => {
+    filteredTasks.forEach(task => {
         const cardHTML = createTaskCardHTML(task);
         
         if (task.status === 'Todo') {

@@ -53,6 +53,24 @@
             </div>
         </div>
 
+        <!-- Search and Filter Controls -->
+        <div class="row mb-4 justify-content-center">
+            <div class="col-md-10">
+                <div class="d-flex gap-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 border-color"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0" id="searchBar" placeholder="Search tasks by title or description...">
+                    </div>
+                    <select class="form-select" id="filterPriority" style="max-width: 200px;">
+                        <option value="All">All Priorities</option>
+                        <option value="High">High Priority</option>
+                        <option value="Medium">Medium Priority</option>
+                        <option value="Low">Low Priority</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <!-- Task Form Section -->
         <div class="row mb-5 justify-content-center">
             <div class="col-md-10">

@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('taskForm')) {
         initDashboard();
     }
+    if (document.getElementById('contactForm')) {
+        initContactForm();
+    }
+    if (document.getElementById('archiveTableBody')) {
+        initArchive();
+    }
 });
 
 /**
@@ -311,4 +317,109 @@ function formatDate(dateStr) {
     } catch (e) {
         return dateStr;
     }
+}
+
+/**
+ * Contact Form Module
+ */
+function initContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        // Clear existing alerts if any
+        const existingAlert = contactForm.querySelector('.alert');
+        if (existingAlert) existingAlert.remove();
+
+        // Email validation regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showContactAlert('Please enter a valid email address.', 'danger');
+            return;
+        }
+
+        // Message length validation
+        if (message.length < 10) {
+            showContactAlert('Please enter a message containing at least 10 characters.', 'danger');
+            return;
+        }
+
+        // Simulating submission success
+        showContactAlert(`Thank you, ${escapeHTML(firstName)}! Your message has been sent successfully.`, 'success');
+        contactForm.reset();
+    });
+}
+
+function showContactAlert(msg, type) {
+    const contactForm = document.getElementById('contactForm');
+    const alertHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show mt-3 shadow-sm" role="alert">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} me-2"></i>
+            ${msg}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    contactForm.insertAdjacentHTML('beforeend', alertHTML);
+}
+
+/**
+ * Archive Module
+ */
+function initArchive() {
+    const clearArchiveBtn = document.getElementById('clearArchiveBtn');
+    
+    if (clearArchiveBtn) {
+        clearArchiveBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to permanently delete all archived tasks? This action cannot be undone.')) {
+                Storage.clearArchive();
+                renderArchive();
+            }
+        });
+    }
+
+    renderArchive();
+}
+
+function renderArchive() {
+    const archiveTableBody = document.getElementById('archiveTableBody');
+    const archiveTableContainer = document.getElementById('archiveTableContainer');
+    const emptyArchiveState = document.getElementById('emptyArchiveState');
+    const clearArchiveBtn = document.getElementById('clearArchiveBtn');
+
+    if (!archiveTableBody) return;
+
+    const archivedTasks = Storage.getArchivedTasks();
+
+    if (archivedTasks.length === 0) {
+        if (archiveTableContainer) archiveTableContainer.classList.add('d-none');
+        if (emptyArchiveState) emptyArchiveState.classList.remove('d-none');
+        if (clearArchiveBtn) clearArchiveBtn.disabled = true;
+        archiveTableBody.innerHTML = '';
+        return;
+    }
+
+    if (archiveTableContainer) archiveTableContainer.classList.remove('d-none');
+    if (emptyArchiveState) emptyArchiveState.classList.add('d-none');
+    if (clearArchiveBtn) clearArchiveBtn.disabled = false;
+
+    archiveTableBody.innerHTML = '';
+
+    archivedTasks.forEach(task => {
+        const rowHTML = `
+            <tr>
+                <td class="fw-semibold">${escapeHTML(task.title)}</td>
+                <td><span class="badge ${getPriorityBadgeClass(task.priority)}">${task.priority}</span></td>
+                <td class="text-muted"><i class="far fa-calendar-check me-1"></i>${task.archivedAt || 'Unknown Date'}</td>
+                <td><span class="badge bg-success"><i class="fas fa-check me-1"></i>Completed</span></td>
+            </tr>
+        `;
+        archiveTableBody.insertAdjacentHTML('beforeend', rowHTML);
+    });
 }

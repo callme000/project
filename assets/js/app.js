@@ -130,6 +130,57 @@ function initDashboard() {
         });
     }
     
+    // Setup Column Drop Zones
+    const columns = document.querySelectorAll('.task-column');
+    columns.forEach(col => {
+        col.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Required to allow drop
+        });
+        
+        col.addEventListener('dragenter', (e) => {
+            e.preventDefault();
+            col.classList.add('drag-over');
+        });
+        
+        col.addEventListener('dragleave', () => {
+            col.classList.remove('drag-over');
+        });
+        
+        col.addEventListener('drop', (e) => {
+            e.preventDefault();
+            col.classList.remove('drag-over');
+            
+            const taskId = e.dataTransfer.getData('text/plain');
+            const targetStatus = col.getAttribute('data-status');
+            
+            if (taskId && targetStatus) {
+                const tasks = Storage.getTasks();
+                const task = tasks.find(t => t.id === taskId);
+                if (task && task.status !== targetStatus) {
+                    Storage.updateTask(taskId, { status: targetStatus });
+                    renderDashboard();
+                }
+            }
+        });
+    });
+
+    // Setup Card Drag Event Delegation
+    document.addEventListener('dragstart', (e) => {
+        const card = e.target.closest('.task-card');
+        if (card) {
+            card.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', card.getAttribute('data-id'));
+            e.dataTransfer.effectAllowed = 'move';
+        }
+    });
+    
+    document.addEventListener('dragend', (e) => {
+        const card = e.target.closest('.task-card');
+        if (card) {
+            card.classList.remove('dragging');
+        }
+    });
+
     // Render initial board
     renderDashboard();
 }
@@ -178,7 +229,7 @@ function createTaskCardHTML(task) {
     const prevStatus = task.status === 'Done' ? 'InProgress' : (task.status === 'InProgress' ? 'Todo' : '');
     
     return `
-        <div class="task-card priority-${task.priority.toLowerCase()}" data-id="${task.id}">
+        <div class="task-card priority-${task.priority.toLowerCase()}" draggable="true" data-id="${task.id}">
             <div class="d-flex justify-content-between align-items-start mb-2">
                 <h6 class="fw-bold mb-0 text-break">${escapeHTML(task.title)}</h6>
                 <span class="badge ${getPriorityBadgeClass(task.priority)}">${task.priority}</span>

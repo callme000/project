@@ -95,7 +95,7 @@
         <div class="row g-4 mb-5">
             <!-- To Do Column -->
             <div class="col-lg-4">
-                <div class="task-column border">
+                <div class="task-column border" data-status="Todo">
                     <h5 class="border-bottom pb-2 mb-3 d-flex justify-content-between align-items-center fw-bold">
                         <span class="text-secondary"><i class="far fa-circle me-2"></i>To Do</span>
                         <span class="badge bg-secondary rounded-pill" id="todoCount">0</span>
@@ -105,10 +105,10 @@
                     </div>
                 </div>
             </div>
-
+ 
             <!-- In Progress Column -->
             <div class="col-lg-4">
-                <div class="task-column border">
+                <div class="task-column border" data-status="InProgress">
                     <h5 class="border-bottom pb-2 mb-3 d-flex justify-content-between align-items-center fw-bold">
                         <span class="text-primary"><i class="fas fa-spinner fa-spin me-2"></i>In Progress</span>
                         <span class="badge bg-primary rounded-pill" id="inProgressCount">0</span>
@@ -118,10 +118,10 @@
                     </div>
                 </div>
             </div>
-
+ 
             <!-- Done Column -->
             <div class="col-lg-4">
-                <div class="task-column border">
+                <div class="task-column border" data-status="Done">
                     <h5 class="border-bottom pb-2 mb-3 d-flex justify-content-between align-items-center fw-bold">
                         <span class="text-success"><i class="fas fa-check-circle me-2"></i>Done</span>
                         <span class="badge bg-success rounded-pill" id="doneCount">0</span>

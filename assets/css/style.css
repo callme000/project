@@ -278,5 +278,21 @@ body {
     filter: invert(1) grayscale(1) brightness(2);
 }
 
+/* Drag and Drop visual feedback styling */
+.task-column.drag-over {
+    border: 2px dashed var(--color-primary) !important;
+    background-color: rgba(var(--color-primary-rgb), 0.04) !important;
+}
+
+[data-theme="dark"] .task-column.drag-over {
+    background-color: rgba(var(--color-primary-rgb), 0.1) !important;
+}
+
+.task-card.dragging {
+    opacity: 0.55;
+    border-style: dashed;
+}
+
+
 
 

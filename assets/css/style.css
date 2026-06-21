@@ -182,7 +182,9 @@ body {
 [data-theme="dark"] .card-title,
 [data-theme="dark"] .card-subtitle,
 [data-theme="dark"] .card-header,
-[data-theme="dark"] legend {
+[data-theme="dark"] legend,
+[data-theme="dark"] .fw-semibold:not(.badge),
+[data-theme="dark"] span:not(.badge):not(.text-muted) {
     color: var(--text-primary) !important;
 }
 

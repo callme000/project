@@ -544,6 +544,12 @@ function initHomepageStats() {
     const heroTaskCount = document.getElementById('heroTaskCount');
     if (!heroStats || !heroTaskCount) return;
 
+    // Safety check in case Storage module is not loaded on this page
+    if (typeof Storage === 'undefined' || typeof Storage.getTasks !== 'function') {
+        console.warn('Storage module is not loaded.');
+        return;
+    }
+
     try {
         const tasks = Storage.getTasks();
         if (tasks && tasks.length > 0) {

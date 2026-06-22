@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('activeTasksCount')) {
         initAnalytics();
     }
+    if (document.getElementById('heroStats')) {
+        initHomepageStats();
+    }
 });
 
 /**
@@ -531,4 +534,23 @@ function renderAnalytics() {
     if (highPriorityCountEl) highPriorityCountEl.textContent = highCount;
     if (mediumPriorityCountEl) mediumPriorityCountEl.textContent = mediumCount;
     if (lowPriorityCountEl) lowPriorityCountEl.textContent = lowCount;
+}
+
+/**
+ * Homepage Module
+ */
+function initHomepageStats() {
+    const heroStats = document.getElementById('heroStats');
+    const heroTaskCount = document.getElementById('heroTaskCount');
+    if (!heroStats || !heroTaskCount) return;
+
+    try {
+        const tasks = Storage.getTasks();
+        if (tasks && tasks.length > 0) {
+            heroTaskCount.textContent = tasks.length;
+            heroStats.style.display = 'block';
+        }
+    } catch (e) {
+        console.error('Error fetching homepage task counts', e);
+    }
 }

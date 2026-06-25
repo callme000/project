@@ -98,6 +98,12 @@ function initDashboard() {
             renderDashboard();
         });
     }
+    const sortBy = document.getElementById('sortBy');
+    if (sortBy) {
+        sortBy.addEventListener('change', () => {
+            renderDashboard();
+        });
+    }
 
     // Export Backup Handler
     const exportBtn = document.getElementById('exportBtn');
@@ -277,11 +283,13 @@ function renderDashboard() {
     
     const tasks = Storage.getTasks();
 
-    // Read search query & priority filter
+    // Read search query, priority filter, & sort options
     const searchBar = document.getElementById('searchBar');
     const filterPriority = document.getElementById('filterPriority');
+    const sortBy = document.getElementById('sortBy');
     const query = searchBar ? searchBar.value.toLowerCase().trim() : '';
     const selectedPriority = filterPriority ? filterPriority.value : 'All';
+    const selectedSort = sortBy ? sortBy.value : 'default';
     
     // Filter tasks
     const filteredTasks = tasks.filter(task => {
@@ -291,6 +299,31 @@ function renderDashboard() {
         const matchesPriority = selectedPriority === 'All' || task.priority === selectedPriority;
         return matchesSearch && matchesPriority;
     });
+
+    // Sort tasks
+    if (selectedSort === 'dueDateAsc') {
+        filteredTasks.sort((a, b) => {
+            const dateA = a.dueDate ? new Date(a.dueDate) : new Date('9999-12-31');
+            const dateB = b.dueDate ? new Date(b.dueDate) : new Date('9999-12-31');
+            return dateA - dateB;
+        });
+    } else if (selectedSort === 'dueDateDesc') {
+        filteredTasks.sort((a, b) => {
+            const dateA = a.dueDate ? new Date(a.dueDate) : new Date('1970-01-01');
+            const dateB = b.dueDate ? new Date(b.dueDate) : new Date('1970-01-01');
+            return dateB - dateA;
+        });
+    } else if (selectedSort === 'priorityHigh') {
+        const priorityOrder = { 'High': 3, 'Medium': 2, 'Low': 1 };
+        filteredTasks.sort((a, b) => {
+            return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
+        });
+    } else if (selectedSort === 'priorityLow') {
+        const priorityOrder = { 'High': 3, 'Medium': 2, 'Low': 1 };
+        filteredTasks.sort((a, b) => {
+            return (priorityOrder[a.priority] || 0) - (priorityOrder[b.priority] || 0);
+        });
+    }
     
     let todoCount = 0;
     let inProgressCount = 0;

@@ -67,6 +67,13 @@
                         <option value="Medium">Medium Priority</option>
                         <option value="Low">Low Priority</option>
                     </select>
+                    <select class="form-select w-auto" id="sortBy" style="min-width: 150px;">
+                        <option value="default">Sort by...</option>
+                        <option value="dueDateAsc">Due Date (Soonest)</option>
+                        <option value="dueDateDesc">Due Date (Latest)</option>
+                        <option value="priorityHigh">Priority (High to Low)</option>
+                        <option value="priorityLow">Priority (Low to High)</option>
+                    </select>
                     <div class="d-flex gap-2">
                         <button class="btn btn-outline-secondary px-3" id="exportBtn" title="Export Tasks to JSON">
                             <i class="fas fa-file-export me-1"></i> Export

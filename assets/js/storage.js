@@ -145,6 +145,16 @@ const Storage = {
             return true;
         }
         return false;
+    },
+
+    /**
+     * Delete a single task from the archive permanently
+     * @param {String} taskId Unique task ID
+     */
+    deleteArchivedTask(taskId) {
+        const archivedTasks = this.getArchivedTasks();
+        const filteredArchive = archivedTasks.filter(t => t.id !== taskId);
+        this.saveArchivedTasks(filteredArchive);
     }
 };
 

@@ -505,11 +505,23 @@ function renderArchive() {
                 <td><span class="badge ${getPriorityBadgeClass(task.priority)}">${task.priority}</span></td>
                 <td class="text-muted"><i class="far fa-calendar-check me-1"></i>${task.archivedAt || 'Unknown Date'}</td>
                 <td><span class="badge bg-success"><i class="fas fa-check me-1"></i>Completed</span></td>
+                <td class="text-end">
+                    <button class="btn btn-sm btn-outline-danger border-0 py-0" onclick="deleteArchivedTask('${task.id}')" title="Delete Permanently">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
             </tr>
         `;
         archiveTableBody.insertAdjacentHTML('beforeend', rowHTML);
     });
 }
+
+window.deleteArchivedTask = function(taskId) {
+    if (confirm('Are you sure you want to permanently delete this task from the archive? This action cannot be undone.')) {
+        Storage.deleteArchivedTask(taskId);
+        renderArchive();
+    }
+};
 
 /**
  * Analytics Module

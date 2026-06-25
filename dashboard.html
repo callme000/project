@@ -56,17 +56,26 @@
         <!-- Search and Filter Controls -->
         <div class="row mb-4 justify-content-center">
             <div class="col-md-10">
-                <div class="d-flex gap-3">
-                    <div class="input-group">
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                    <div class="input-group flex-grow-1">
                         <span class="input-group-text bg-transparent border-end-0 border-color"><i class="fas fa-search text-muted"></i></span>
                         <input type="text" class="form-control border-start-0" id="searchBar" placeholder="Search tasks by title or description...">
                     </div>
-                    <select class="form-select" id="filterPriority" style="max-width: 200px;">
+                    <select class="form-select w-auto" id="filterPriority" style="min-width: 150px;">
                         <option value="All">All Priorities</option>
                         <option value="High">High Priority</option>
                         <option value="Medium">Medium Priority</option>
                         <option value="Low">Low Priority</option>
                     </select>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-secondary px-3" id="exportBtn" title="Export Tasks to JSON">
+                            <i class="fas fa-file-export me-1"></i> Export
+                        </button>
+                        <label class="btn btn-outline-secondary px-3 mb-0 d-flex align-items-center justify-content-center" id="importLabel" title="Import Tasks from JSON" for="importFile" style="cursor: pointer;">
+                            <i class="fas fa-file-import me-1"></i> Import
+                        </label>
+                        <input type="file" id="importFile" accept=".json" style="display: none;">
+                    </div>
                 </div>
             </div>
         </div>

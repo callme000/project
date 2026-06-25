@@ -128,6 +128,23 @@ const Storage = {
         } catch (e) {
             console.error('Error clearing archive', e);
         }
+    },
+
+    /**
+     * Overwrite active tasks and archived tasks from import
+     * @param {Object} data Import data object containing tasks and/or archive
+     */
+    importData(data) {
+        if (data) {
+            if (Array.isArray(data.tasks)) {
+                this.saveTasks(data.tasks);
+            }
+            if (Array.isArray(data.archive)) {
+                this.saveArchivedTasks(data.archive);
+            }
+            return true;
+        }
+        return false;
     }
 };
 

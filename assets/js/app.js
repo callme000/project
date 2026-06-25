@@ -98,6 +98,57 @@ function initDashboard() {
             renderDashboard();
         });
     }
+
+    // Export Backup Handler
+    const exportBtn = document.getElementById('exportBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            const data = {
+                tasks: Storage.getTasks(),
+                archive: Storage.getArchivedTasks()
+            };
+            const jsonStr = JSON.stringify(data, null, 4);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `taskflow_backup_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    }
+
+    // Import Backup Handler
+    const importFile = document.getElementById('importFile');
+    if (importFile) {
+        importFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (data && (Array.isArray(data.tasks) || Array.isArray(data.archive))) {
+                        if (confirm('Valid backup file loaded. Overwrite current board and archive database with imported tasks?')) {
+                            Storage.importData(data);
+                            renderDashboard();
+                            alert('Data backup successfully restored!');
+                        }
+                    } else {
+                        alert('Invalid backup format. Backup must contain task objects.');
+                    }
+                } catch (err) {
+                    console.error('Error reading backup file', err);
+                    alert('Error parsing backup file. Ensure it is a valid JSON file.');
+                }
+            };
+            reader.readAsText(file);
+            importFile.value = ''; // Reset file input
+        });
+    }
     
     // Task addition submission
     taskForm.addEventListener('submit', (e) => {

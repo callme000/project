@@ -255,6 +255,11 @@ function initDashboard() {
             card.classList.add('dragging');
             e.dataTransfer.setData('text/plain', card.getAttribute('data-id'));
             e.dataTransfer.effectAllowed = 'move';
+            
+            // Add visual helper for active drop zones
+            document.querySelectorAll('.task-column').forEach(col => {
+                col.classList.add('drag-active');
+            });
         }
     });
     
@@ -263,6 +268,11 @@ function initDashboard() {
         if (card) {
             card.classList.remove('dragging');
         }
+        // Remove active visual helpers from columns
+        document.querySelectorAll('.task-column').forEach(col => {
+            col.classList.remove('drag-active');
+            col.classList.remove('drag-over');
+        });
     });
 
     // Render initial board

@@ -275,6 +275,47 @@ function initDashboard() {
         });
     });
 
+    // Interactive Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+        // Ignore if user is typing in an input, textarea, select, or editable element
+        const activeEl = document.activeElement;
+        if (activeEl && (
+            activeEl.tagName === 'INPUT' || 
+            activeEl.tagName === 'TEXTAREA' || 
+            activeEl.tagName === 'SELECT' || 
+            activeEl.isContentEditable
+        )) {
+            return;
+        }
+
+        // 'c' or 'C' to focus task title input
+        if (e.key === 'c' || e.key === 'C') {
+            const taskTitleInput = document.getElementById('taskTitle');
+            if (taskTitleInput) {
+                e.preventDefault();
+                taskTitleInput.focus();
+                taskTitleInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // '/' to focus search bar
+        if (e.key === '/') {
+            const searchBar = document.getElementById('searchBar');
+            if (searchBar) {
+                e.preventDefault();
+                searchBar.focus();
+                searchBar.select();
+            }
+        }
+
+        // 'Escape' to blur focus from active element
+        if (e.key === 'Escape') {
+            if (activeEl && activeEl !== document.body) {
+                activeEl.blur();
+            }
+        }
+    });
+
     // Render initial board
     renderDashboard();
 }

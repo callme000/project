@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('heroStats')) {
         initHomepageStats();
     }
+    if (document.getElementById('faqSearchInput')) {
+        initFAQ();
+    }
 });
 
 /**
@@ -766,4 +769,28 @@ function initHomepageStats() {
     } catch (e) {
         console.error('Error fetching homepage task counts', e);
     }
+}
+
+/**
+ * FAQ Search Module
+ */
+function initFAQ() {
+    const faqSearchInput = document.getElementById('faqSearchInput');
+    if (!faqSearchInput) return;
+    
+    faqSearchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        const items = document.querySelectorAll('#faqAccordion .accordion-item');
+        
+        items.forEach(item => {
+            const buttonText = item.querySelector('.accordion-button').textContent.toLowerCase();
+            const bodyText = item.querySelector('.accordion-body').textContent.toLowerCase();
+            
+            if (buttonText.includes(query) || bodyText.includes(query)) {
+                item.classList.remove('d-none');
+            } else {
+                item.classList.add('d-none');
+            }
+        });
+    });
 }

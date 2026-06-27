@@ -123,6 +123,7 @@ function initDashboard() {
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            showToast('Backup file exported successfully!');
         });
     }
 
@@ -141,14 +142,14 @@ function initDashboard() {
                         if (confirm('Valid backup file loaded. Overwrite current board and archive database with imported tasks?')) {
                             Storage.importData(data);
                             renderDashboard();
-                            alert('Data backup successfully restored!');
+                            showToast('Data backup successfully restored!');
                         }
                     } else {
-                        alert('Invalid backup format. Backup must contain task objects.');
+                        showToast('Invalid backup format. Backup must contain task objects.', 'danger');
                     }
                 } catch (err) {
                     console.error('Error reading backup file', err);
-                    alert('Error parsing backup file. Ensure it is a valid JSON file.');
+                    showToast('Error parsing backup file. Ensure it is a valid JSON file.', 'danger');
                 }
             };
             reader.readAsText(file);
@@ -183,6 +184,7 @@ function initDashboard() {
         // Set default priority selection back to Medium
         document.getElementById('taskPriority').value = 'Medium';
         
+        showToast('Task added to the board successfully!');
         renderDashboard();
     });
     
@@ -210,6 +212,7 @@ function initDashboard() {
                 editModalInstance.hide();
             }
             
+            showToast('Task updated successfully!');
             renderDashboard();
         });
     }
@@ -242,6 +245,8 @@ function initDashboard() {
                 const task = tasks.find(t => t.id === taskId);
                 if (task && task.status !== targetStatus) {
                     Storage.updateTask(taskId, { status: targetStatus });
+                    const statusNames = { 'Todo': 'To Do', 'InProgress': 'In Progress', 'Done': 'Done' };
+                    showToast(`Task moved to "${statusNames[targetStatus] || targetStatus}"`);
                     renderDashboard();
                 }
             }
@@ -431,13 +436,24 @@ function createTaskCardHTML(task) {
 
 // Exposure of actions on window object for inline onclick handlers
 window.shiftStatus = function(taskId, newStatus) {
+    const tasks = Storage.getTasks();
+    const task = tasks.find(t => t.id === taskId);
     Storage.updateTask(taskId, { status: newStatus });
+    if (task) {
+        const statusNames = { 'Todo': 'To Do', 'InProgress': 'In Progress', 'Done': 'Done' };
+        showToast(`Task moved to "${statusNames[newStatus] || newStatus}"`);
+    }
     renderDashboard();
 };
 
 window.archiveTask = function(taskId) {
+    const tasks = Storage.getTasks();
+    const task = tasks.find(t => t.id === taskId);
     if (confirm('Are you sure you want to archive this task? It will be moved to the archive list.')) {
         Storage.archiveTask(taskId);
+        if (task) {
+            showToast(`Task "${task.title}" successfully archived!`);
+        }
         renderDashboard();
     }
 };
@@ -489,6 +505,48 @@ function formatDate(dateStr) {
         return dateStr;
     }
 }
+
+/**
+ * Toast Notification System using Bootstrap Toast
+ */
+function showToast(message, type = 'success') {
+    let container = document.getElementById('toastContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+        container.style.zIndex = '1080';
+        document.body.appendChild(container);
+    }
+    
+    const toastId = 'toast-' + Date.now() + Math.random().toString(36).substring(2, 6);
+    const bgClass = type === 'success' ? 'bg-success' : type === 'danger' ? 'bg-danger' : 'bg-info';
+    const textClass = 'text-white';
+    const iconClass = type === 'success' ? 'fa-check-circle' : type === 'danger' ? 'fa-exclamation-circle' : 'fa-info-circle';
+    
+    const toastHTML = `
+        <div id="${toastId}" class="toast align-items-center ${bgClass} ${textClass} border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body d-flex align-items-center gap-2">
+                    <i class="fas ${iconClass}"></i>
+                    <span>${message}</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', toastHTML);
+    const toastEl = document.getElementById(toastId);
+    
+    const bsToast = new bootstrap.Toast(toastEl, { delay: 4000 });
+    bsToast.show();
+    
+    toastEl.addEventListener('hidden.bs.toast', () => {
+        toastEl.remove();
+    });
+}
+window.showToast = showToast;
 
 /**
  * Contact Form Module
@@ -550,6 +608,7 @@ function initArchive() {
         clearArchiveBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to permanently delete all archived tasks? This action cannot be undone.')) {
                 Storage.clearArchive();
+                showToast('All archived tasks permanently cleared.', 'danger');
                 renderArchive();
             }
         });
@@ -603,6 +662,7 @@ function renderArchive() {
 window.deleteArchivedTask = function(taskId) {
     if (confirm('Are you sure you want to permanently delete this task from the archive? This action cannot be undone.')) {
         Storage.deleteArchivedTask(taskId);
+        showToast('Task permanently deleted from the archive.', 'danger');
         renderArchive();
     }
 };

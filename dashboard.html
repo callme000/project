@@ -64,7 +64,10 @@
                 <div class="d-flex flex-wrap gap-3 align-items-center">
                     <div class="input-group flex-grow-1">
                         <span class="input-group-text bg-transparent border-end-0 border-color"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" class="form-control border-start-0" id="searchBar" placeholder="Search tasks by title or description...">
+                        <input type="text" class="form-control border-start-0 border-end-0" id="searchBar" placeholder="Search tasks by title or description...">
+                        <button class="btn btn-outline-secondary border-start-0 bg-transparent" type="button" id="clearSearchBtn" title="Clear Search" style="display: none; border-color: var(--border-color);">
+                            <i class="fas fa-times text-muted"></i>
+                        </button>
                     </div>
                     <select class="form-select w-auto" id="filterPriority" style="min-width: 150px;">
                         <option value="All">All Priorities</option>

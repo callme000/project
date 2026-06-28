@@ -90,9 +90,22 @@ function initDashboard() {
     // Search and Filter Listeners
     const searchBar = document.getElementById('searchBar');
     const filterPriority = document.getElementById('filterPriority');
+    const sortBy = document.getElementById('sortBy');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
     
     if (searchBar) {
         searchBar.addEventListener('input', () => {
+            if (clearSearchBtn) {
+                clearSearchBtn.style.display = searchBar.value.trim() !== '' ? 'block' : 'none';
+            }
+            renderDashboard();
+        });
+    }
+    if (clearSearchBtn && searchBar) {
+        clearSearchBtn.addEventListener('click', () => {
+            searchBar.value = '';
+            clearSearchBtn.style.display = 'none';
+            searchBar.focus();
             renderDashboard();
         });
     }
@@ -101,7 +114,6 @@ function initDashboard() {
             renderDashboard();
         });
     }
-    const sortBy = document.getElementById('sortBy');
     if (sortBy) {
         sortBy.addEventListener('change', () => {
             renderDashboard();
@@ -313,6 +325,10 @@ function initDashboard() {
                 e.preventDefault();
                 searchBar.focus();
                 searchBar.select();
+                const clearSearchBtn = document.getElementById('clearSearchBtn');
+                if (clearSearchBtn) {
+                    clearSearchBtn.style.display = searchBar.value.trim() !== '' ? 'block' : 'none';
+                }
             }
         }
 

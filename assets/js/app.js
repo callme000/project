@@ -763,6 +763,31 @@ function renderAnalytics() {
     archivedTasksCountEl.textContent = archivedTasksCount;
     completionRateValueEl.textContent = completionRate + '%';
 
+    // Calculate overdue tasks
+    let overdueCount = 0;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    tasks.forEach(task => {
+        if (task.dueDate && task.status !== 'Done') {
+            const due = new Date(task.dueDate);
+            if (due < today) {
+                overdueCount++;
+            }
+        }
+    });
+
+    const overdueAlertEl = document.getElementById('analyticsOverdueAlert');
+    const overdueCountEl = document.getElementById('overdueTasksCount');
+    if (overdueAlertEl && overdueCountEl) {
+        if (overdueCount > 0) {
+            overdueCountEl.textContent = overdueCount;
+            overdueAlertEl.style.display = 'block';
+        } else {
+            overdueAlertEl.style.display = 'none';
+        }
+    }
+
     const completionRateMessageEl = document.getElementById('completionRateMessage');
     if (completionRateMessageEl) {
         let msg = '';

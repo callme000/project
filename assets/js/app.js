@@ -710,6 +710,25 @@ function renderAnalytics() {
     archivedTasksCountEl.textContent = archivedTasksCount;
     completionRateValueEl.textContent = completionRate + '%';
 
+    const completionRateMessageEl = document.getElementById('completionRateMessage');
+    if (completionRateMessageEl) {
+        let msg = '';
+        if (totalCreated === 0) {
+            msg = 'No tasks created yet.';
+        } else if (completionRate === 0) {
+            msg = 'No tasks completed yet.';
+        } else if (completionRate < 35) {
+            msg = 'Getting started! Keep taking action.';
+        } else if (completionRate < 70) {
+            msg = 'Good progress! You are on track.';
+        } else if (completionRate < 100) {
+            msg = 'Excellent productivity! Almost done.';
+        } else {
+            msg = 'Perfect score! All tasks completed.';
+        }
+        completionRateMessageEl.textContent = msg;
+    }
+
     // Calculate Column Distribution Percentages (Avoid division by zero)
     const todoCount = tasks.filter(t => t.status === 'Todo').length;
     const inProgressCount = tasks.filter(t => t.status === 'InProgress').length;

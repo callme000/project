@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('faqSearchInput')) {
         initFAQ();
     }
+    initScrollToTop();
 });
 
 /**
@@ -862,6 +863,40 @@ function initFAQ() {
             } else {
                 item.classList.add('d-none');
             }
+        });
+    });
+}
+
+/**
+ * Scroll to Top Helper
+ */
+function initScrollToTop() {
+    const btn = document.createElement('button');
+    btn.id = 'scrollToTopBtn';
+    btn.className = 'btn btn-primary rounded-circle shadow position-fixed bottom-0 end-0 m-4';
+    btn.style.zIndex = '1030';
+    btn.style.width = '44px';
+    btn.style.height = '44px';
+    btn.style.display = 'flex';
+    btn.style.alignItems = 'center';
+    btn.style.justifyContent = 'center';
+    btn.setAttribute('aria-label', 'Scroll to Top');
+    btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    
+    document.body.appendChild(btn);
+    
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    });
+    
+    btn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
         });
     });
 }

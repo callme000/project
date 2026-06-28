@@ -429,16 +429,29 @@ function createTaskCardHTML(task) {
     const nextStatus = task.status === 'Todo' ? 'InProgress' : (task.status === 'InProgress' ? 'Done' : '');
     const prevStatus = task.status === 'Done' ? 'InProgress' : (task.status === 'InProgress' ? 'Todo' : '');
     
+    // Check if task is overdue (due date is in the past and status is not Done)
+    let isOverdue = false;
+    if (task.dueDate && task.status !== 'Done') {
+        const due = new Date(task.dueDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        isOverdue = due < today;
+    }
+    
+    const overdueClass = isOverdue ? 'overdue-card' : '';
+    const dateIconClass = isOverdue ? 'fas fa-exclamation-triangle text-danger' : 'far fa-calendar-alt';
+    const dateTextClass = isOverdue ? 'text-danger fw-bold' : '';
+    
     return `
-        <div class="task-card priority-${task.priority.toLowerCase()}" draggable="true" data-id="${task.id}">
+        <div class="task-card priority-${task.priority.toLowerCase()} ${overdueClass}" draggable="true" data-id="${task.id}">
             <div class="d-flex justify-content-between align-items-start mb-2">
                 <h6 class="fw-bold mb-0 text-break">${escapeHTML(task.title)}</h6>
                 <span class="badge ${getPriorityBadgeClass(task.priority)}">${task.priority}</span>
             </div>
             <p class="small text-muted mb-3 text-break">${escapeHTML(task.description) || 'No description provided.'}</p>
             <div class="d-flex justify-content-between align-items-center">
-                <span class="small text-muted fw-semibold">
-                    <i class="far fa-calendar-alt me-1"></i>${task.dueDate ? formatDate(task.dueDate) : 'No due date'}
+                <span class="small text-muted fw-semibold ${dateTextClass}">
+                    <i class="${dateIconClass} me-1"></i>${task.dueDate ? formatDate(task.dueDate) : 'No due date'}
                 </span>
                 <div class="d-flex gap-1">
                     <!-- Shift Navigation -->

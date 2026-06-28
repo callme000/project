@@ -157,6 +157,10 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+.task-card.overdue-card {
+    border-left: 4px solid var(--color-danger) !important;
+}
+
 /* Global Dark Mode Overrides for Bootstrap Utilities */
 [data-theme="dark"] .bg-white {
     background-color: var(--bg-card) !important;

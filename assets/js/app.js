@@ -419,6 +419,29 @@ function renderDashboard() {
         }
     });
     
+    // Render empty state placeholders if columns have no tasks
+    if (todoCount === 0) {
+        todoList.innerHTML = `
+            <div class="empty-column-placeholder text-center py-4 px-2 small opacity-75">
+                <i class="fas fa-clipboard-list mb-2 d-block text-muted"></i>No tasks here
+            </div>
+        `;
+    }
+    if (inProgressCount === 0) {
+        inProgressList.innerHTML = `
+            <div class="empty-column-placeholder text-center py-4 px-2 small opacity-75">
+                <i class="fas fa-spinner mb-2 d-block text-muted"></i>No tasks here
+            </div>
+        `;
+    }
+    if (doneCount === 0) {
+        doneList.innerHTML = `
+            <div class="empty-column-placeholder text-center py-4 px-2 small opacity-75">
+                <i class="fas fa-check-circle mb-2 d-block text-muted"></i>No tasks here
+            </div>
+        `;
+    }
+    
     // Update badge counters
     document.getElementById('todoCount').textContent = todoCount;
     document.getElementById('inProgressCount').textContent = inProgressCount;
